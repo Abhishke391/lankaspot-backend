@@ -19,6 +19,10 @@ public class Payment {
     @JoinColumn(name = "advertisement_id", nullable = false)
     private Advertisement advertisement;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "policy_id")
+    private AdPolicy policy;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "payer_id", nullable = false)
     private User payer;

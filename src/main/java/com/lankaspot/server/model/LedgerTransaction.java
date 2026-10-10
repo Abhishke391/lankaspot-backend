@@ -12,6 +12,10 @@ public class LedgerTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "policy_id")
+    private AdPolicy policy;
+
     @Column(name = "transaction_type", nullable = false, length = 50)
     private String transactionType;
 
