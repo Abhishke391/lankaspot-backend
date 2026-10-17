@@ -2,12 +2,14 @@ package com.lankaspot.server.model;
 
 import com.lankaspot.server.enums.AdvertisementStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "advertisements")
+@Data
 public class Advertisement {
 
     @Id

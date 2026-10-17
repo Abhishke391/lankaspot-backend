@@ -19,9 +19,6 @@ public class User {
     @Column(name = "display_name", length = 150)
     private String displayName;
 
-    @Column(name = "phone_number", length = 20)
-    private String phoneNumber;
-
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

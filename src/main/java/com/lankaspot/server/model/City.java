@@ -1,9 +1,11 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "cities")
+@Data
 public class City {
 
     @Id

@@ -27,7 +27,7 @@ public class AdPolicy {
     @Column(name = "source", nullable = false, length = 20)
     private AdSource source = AdSource.USER;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tier_id", nullable = false)
+    @JoinColumn(name = "tier_id")
     private AdvertisementTier tier;
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)

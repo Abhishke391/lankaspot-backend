@@ -12,5 +12,6 @@ public enum AdvertisementStatus {
     EXPIRED,
     SOLD,
     RENTED,
-    ARCHIVED
+    ARCHIVED,
+    PENDING_REVIEW
 }

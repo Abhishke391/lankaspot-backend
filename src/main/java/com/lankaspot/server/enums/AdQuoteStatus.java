@@ -1,5 +1,5 @@
 package com.lankaspot.server.enums;
 
 public enum AdQuoteStatus {
-    COMPLETED, IN_COMPLETE
+    COMPLETE, IN_COMPLETE, REJECTED, PENDING, DRAFT, USER_REJECTED, PENDING_REVIEW
 }

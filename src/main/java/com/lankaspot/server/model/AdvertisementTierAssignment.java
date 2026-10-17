@@ -1,11 +1,13 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "advertisement_tier_assignments")
+@Data
 public class AdvertisementTierAssignment {
 
     @Id

@@ -1,8 +1,15 @@
 package com.lankaspot.server.model;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
+@Getter
+@Setter
 public class Category{
 
     @Id
@@ -23,4 +30,12 @@ public class Category{
 
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder = 0;
+
+    @ManyToMany
+    @JoinTable(
+            name = "category_features",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_id")
+    )
+    private Set<Feature> features = new HashSet<>();
 }

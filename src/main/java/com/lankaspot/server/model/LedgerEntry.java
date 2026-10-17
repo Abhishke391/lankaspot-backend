@@ -2,11 +2,13 @@ package com.lankaspot.server.model;
 
 import com.lankaspot.server.enums.LedgerEntryType;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ledger_entries")
+@Data
 public class LedgerEntry {
 
     @Id

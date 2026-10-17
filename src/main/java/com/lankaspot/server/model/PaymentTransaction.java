@@ -1,12 +1,14 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payment_transactions")
+@Data
 public class PaymentTransaction {
 
     @Id

@@ -1,11 +1,13 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ledger_transactions")
+@Data
 public class LedgerTransaction {
 
     @Id

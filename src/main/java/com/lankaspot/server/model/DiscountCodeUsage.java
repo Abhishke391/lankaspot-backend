@@ -1,12 +1,18 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "discount_code_usages")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DiscountCodeUsage {
 
     @Id

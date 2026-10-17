@@ -1,5 +1,5 @@
 package com.lankaspot.server.enums;
 
 public enum AdPolicyStatus {
-    APPROVED, ACTIVE, INACTIVE, RETIRED
+    APPROVED, ACTIVE, INACTIVE, RETIRED, PENDING_REVIEW
 }

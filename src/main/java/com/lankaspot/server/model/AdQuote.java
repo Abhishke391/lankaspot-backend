@@ -3,9 +3,12 @@ package com.lankaspot.server.model;
 import com.lankaspot.server.enums.AdQuoteStatus;
 import com.lankaspot.server.enums.AdSource;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -15,6 +18,10 @@ import java.util.UUID;
 @Table(name = "ad_quotes",
         uniqueConstraints = @UniqueConstraint(name = "uq_ad_quote_version",
                 columnNames = {"advertisement_ref", "version"}))
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class AdQuote {
 
     @Id
@@ -25,16 +32,14 @@ public class AdQuote {
     private UUID advertisementRef;
 
     @Column(name = "version", nullable = false, updatable = false)
-    private Integer version;
+    private Integer version = 0;
 
     @Column(name = "advertiser_id", updatable = false)
-    private Long advertiserId;
+    private UUID advertiserId;
 
-    @Column(name = "category_id", updatable = false)
-    private Long categoryId;
-
-    @Column(name = "category_name", length = 100, updatable = false)
-    private String categoryName;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "category_id", nullable = false, updatable = false)
+    private Category category;
 
     @Column(name = "title", nullable = false, length = 200, updatable = false)
     private String title;
@@ -48,20 +53,21 @@ public class AdQuote {
     @Column(name = "price", precision = 15, scale = 2, updatable = false)
     private BigDecimal price;
 
-    @Column(name = "district", nullable = false, length = 100, updatable = false)
-    private String district;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "city_id", nullable = false, updatable = false)
+    private City city;
 
-    @Column(name = "city", nullable = false, length = 100, updatable = false)
-    private String city;
+    @Column(name = "town", nullable = false, length = 100, updatable = false)
+    private String town;
 
-    @Column(name = "area", length = 100, updatable = false)
-    private String area;
+    @Column(name = "nearest_landmark", nullable = false, length = 100, updatable = false)
+    private String nearestLandmark;
 
     @Column(name = "address", columnDefinition = "TEXT", updatable = false)
     private String address;
 
-    @Column(name = "media_references", columnDefinition = "TEXT", updatable = false)
-    private String mediaReferences;
+    @OneToMany(mappedBy = "adQuote", cascade = CascadeType.PERSIST)
+    private Set<AdQuoteFeature> features = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
@@ -72,43 +78,31 @@ public class AdQuote {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
-    protected AdQuote() {
-    }
-
-    public AdQuote(UUID advertisementRef, Integer version, String title, String slug,
-                   String description, BigDecimal price, String district, String city,
-                   String area, String address, String mediaReferences) {
-        this.advertisementRef = advertisementRef;
-        this.version = version;
-        this.title = title;
-        this.slug = slug;
-        this.description = description;
-        this.price = price;
-        this.district = district;
-        this.city = city;
-        this.area = area;
-        this.address = address;
-        this.mediaReferences = mediaReferences;
-        this.createdAt = LocalDateTime.now();
-    }
-    public void setSource(AdSource source) { this.source = source == null ? AdSource.USER : source; }
-    public AdSource getSource() { return source; }
+    @Column(name = "last_completed_step", nullable = false)
+    private Integer lastCompletedStep = 0;
 
     @PrePersist
-    void initializeCreatedAt() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (createdAt == null) createdAt = now;
+        updatedAt = now;
+    }
+    @PreUpdate
+    void initializeUpdatedAt() {
+        updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public UUID getAdvertisementRef() { return advertisementRef; }
-    public Integer getVersion() { return version; }
-    public String getTitle() { return title; }
-    public AdQuoteStatus getStatus() { return status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public String getSlug(){return slug;} public String getDescription(){return description;} public BigDecimal getPrice(){return price;}
-    public String getDistrict(){return district;} public String getCity(){return city;} public String getArea(){return area;}
-    public String getAddress(){return address;} public String getMediaReferences(){return mediaReferences;}
+    /** Marks a wizard step done. Never moves backwards when an earlier step is re-saved. */
+    public void completeStep(int step) {
+        if (step > lastCompletedStep) lastCompletedStep = step;
+        touch();
+    }
+
+    /** Forces a dirty update so updated_at moves even when nothing else changed. */
+    public void touch() {
+        updatedAt = LocalDateTime.now();
+    }
 }

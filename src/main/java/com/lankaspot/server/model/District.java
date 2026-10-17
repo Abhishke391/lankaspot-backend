@@ -1,9 +1,11 @@
 package com.lankaspot.server.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "districts")
+@Data
 public class District {
 
     @Id
